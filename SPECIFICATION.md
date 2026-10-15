@@ -99,7 +99,7 @@ Reuse equivalent existing organization instead of imposing a second system. Keep
 
 Maintain the helper once here and copy its reviewed implementation into games. Do not ask every future agent to independently reinvent it. Do not recursively copy this repository into a game or copy its maintainer instructions as game instructions.
 
-Use an identified committed source revision when available. Record that revision in the game's PROJECT document. This is a source reference, not an installation registry or automatic update system. Until the setup is merged, give the owner the actual branch/revision; do not claim the ordinary default-branch URL already contains it.
+When copying from the playbook, use a committed source revision and record its repository URL and full commit SHA in the game's PROJECT document. A branch or tag may be an additional label, never a substitute for the SHA; do not copy uncommitted playbook edits as that revision. Each game keeps an independent local copy. This is a source reference, not an installation registry or automatic update system. For unmerged setup, give the owner the actual branch and full commit SHA; do not claim the ordinary default-branch URL already contains it.
 
 ## 4. The project records and their ownership
 
@@ -127,7 +127,7 @@ Do not silently create two authoritative copies of an existing design document. 
 
 ### Minimum template content
 
-**PROJECT.md:** game purpose; goals/non-goals; approved constraints; implemented versus planned systems; important file/scene map; Unity roots and exact versions; intended platforms; how to open/run; relevant test/build commands; what checks each kind of change requires; external dependencies/access; known unknowns; playbook source revision; actual CI/protection limitations. Do not hard-code someone's private absolute machine paths in portable instructions.
+**PROJECT.md:** game purpose; goals/non-goals; approved constraints; implemented versus planned systems; important file/scene map; Unity roots and exact versions; intended platforms; how to open/run; relevant test/build commands; what checks each kind of change requires; external dependencies/access; known unknowns; playbook source repository and full commit SHA; actual CI/protection limitations. Do not hard-code someone's private absolute machine paths in portable instructions.
 
 **TASK.md:** stable human-readable task name/ID; source request or issue and captured revision/date; scope/exclusions; observable acceptance criteria; relevant systems/scenes/decisions; required technical checks and gameplay review. It is a current execution snapshot, not a second progress journal. With no game feature supplied, the real task is setup or awaiting the owner's next task, not an invented feature.
 
@@ -246,7 +246,9 @@ Use this procedure in the game's local WORKFLOW. C and H below are explanations,
 3. **Check the actual inputs.** Run the task's relevant checks against C. Confirm the worktree and dependencies correspond to what is being tested, and inspect for source changes afterward. A Unity import may alter files; resolve that and commit a new C when necessary. Never say a result covers inputs the test did not run against.
 4. **Write the handoff.** Reconcile CURRENT against C and its actual requirements/results. Put C in Reviewed-Commit. A WIP record may honestly say tests failed, were blocked, or were not run. Keep the next action specific.
 5. **Commit H.** Make a handoff-only commit changing CURRENT. No other tracked file belongs in H under the simple freshness rule. Relevant test summaries can live in CURRENT; raw logs stay local or in existing CI/PR artifacts. Do not create an excluded executable/evidence directory.
-6. **Verify and publish.** Run the read-only check on H; inspect local status; push the task branch without force; open/update its draft or normal PR where accessible; and confirm the exact remote commit. Report actual outcomes.
+6. **Validate locally.** Run `python -B tools/ai/check_handoff.py --ref HEAD` on H. Inspect local status, the intended branch, and interrupted Git operations separately; the record-only check does not inspect them.
+7. **Push.** Push the task branch without force.
+8. **Verify publication.** After pushing, run `python -B tools/ai/check_handoff.py --ref HEAD --publish --remote <alias> --branch <name>` with the inspected remote alias and intended branch. Open/update its draft or normal PR where accessible and report the verified remote commit separately from CI results.
 
 This uses ordinary Git commit comparisons, not a custom fingerprint database. All tracked content except CURRENT must be unchanged between C and the checked handoff revision. The agent must not advance Reviewed-Commit merely to silence a failure without reviewing the intervening changes.
 
@@ -283,6 +285,8 @@ Use bounded input sizes and subprocess timeouts, argv arrays rather than shell i
 ### Publication checking
 
 With explicit `--publish`, additionally require the selected revision to be current local HEAD on the intended branch; inspect index/worktree/nonignored untracked files and interrupted Git operations; and query the exact intended remote ref. Refuse a full clean-publication success when unexplained work remains or the branch is detached/mismatched. Show the Git observation separately so safely published committed work is not confused with remaining local work.
+
+Run this mode after pushing. It does not publish anything and cannot pass for a new or advanced local branch until the intended remote tip matches. Validate the committed record without `--publish` and inspect local state before pushing.
 
 Compare local `git rev-parse HEAD` with the object ID returned for exactly `refs/heads/<branch>` by `git ls-remote --exit-code <remote> refs/heads/<branch>`. Verify the returned ref, not just the first output line. A missing ref, authentication/network failure, changed remote tip, or timeout must not become a success. Use the inspected remote alias; never assume `origin`. [R4, R5]
 
@@ -407,7 +411,7 @@ Final report to the owner: repository/branch and publication observation; what w
 
 When a real failure occurs, first protect the game's work. Record the failure and fix it at the smallest appropriate level: clearer instructions, a missing project fact, an existing-tool check, or a focused helper test/change. Do not add an orchestration framework during a gameplay task.
 
-Generalize a useful fix into the playbook only with authorization and without private game content. Other games receive reviewed patches that preserve their instructions, decisions, task state, and code. Compare existing files and integrate changes; never reset project records from fresh templates. Record the new source revision when useful. No installation registry or upgrade engine is needed.
+Generalize a useful fix into the playbook only with authorization and without private game content. Other games receive reviewed patches that preserve their instructions, decisions, task state, and code. Compare existing files and integrate changes; never reset project records from fresh templates. Record the new source repository and full commit SHA when applying a playbook update. No installation registry or upgrade engine is needed.
 
 Do not repeatedly copy files over an already configured game. Reapplication is an inspection and targeted patch, with no duplicate instructions or task resets. Use ordinary reviewed Git reverts for unwanted setup changes, preserving later game work and separately handling any authorized remote-setting changes.
 
@@ -416,7 +420,7 @@ Do not repeatedly copy files over an already configured game. Reapplication is a
 ### Build the reusable repository
 
 ```text
-Execute Unity_AI_Collaboration_Playbook_v3.md in this PLAYBOOK repository:
+Execute SPECIFICATION.md in this PLAYBOOK repository:
 [REPOSITORY URL]
 Build the reusable instructions, templates, and focused checks described there.
 Do not build an installer or a workflow platform. Verify and publish the setup.
@@ -425,7 +429,7 @@ Do not build an installer or a workflow platform. Verify and publish the setup.
 ### Apply it and start a game task
 
 ```text
-Read START_HERE.md in [PLAYBOOK REPOSITORY / REVISION].
+Read START_HERE.md in [PLAYBOOK REPOSITORY / FULL COMMIT SHA].
 Apply that workflow to [GAME REPOSITORY OR LOCAL PATH].
 Preserve existing work, use the appropriate Unity environment, and verify setup.
 Then begin this task: [MY GAME TASK].

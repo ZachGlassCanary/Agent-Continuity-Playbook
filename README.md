@@ -25,7 +25,7 @@ Repository access, a terminal, Git, and Python 3 (the helper uses only the stand
 Apply the playbook and start a game task:
 
 ```text
-Read START_HERE.md in [PLAYBOOK REPOSITORY / REVISION].
+Read START_HERE.md in [PLAYBOOK REPOSITORY / FULL COMMIT SHA].
 Apply that workflow to [GAME REPOSITORY OR LOCAL PATH].
 Preserve existing work, use the appropriate Unity environment, and verify setup.
 Then begin this task: [MY GAME TASK].
@@ -50,7 +50,7 @@ WIP is fine. Do not merge unfinished work or report unrun checks as passed.
 Rebuild or extend this repository:
 
 ```text
-Execute Unity_AI_Collaboration_Playbook_v3.md in this PLAYBOOK repository:
+Execute SPECIFICATION.md in this PLAYBOOK repository:
 [REPOSITORY URL]
 Build the reusable instructions, templates, and focused checks described there.
 Do not build an installer or a workflow platform. Verify and publish the setup.
@@ -58,4 +58,4 @@ Do not build an installer or a workflow platform. Verify and publish the setup.
 
 ## Status
 
-Until the setup branch is merged, the default-branch URL does not contain it; use the branch or revision the owner was given. See `CHANGELOG.md` and `MAINTAINER_NOTES.md` for what has and has not been verified.
+The v3 playbook is available on `main`. Use a full commit SHA when applying it so each game records the exact source of its independent local copy. See `CHANGELOG.md` and `MAINTAINER_NOTES.md` for what has and has not been verified; helper tests are not evidence of real Unity integration or agent switching.

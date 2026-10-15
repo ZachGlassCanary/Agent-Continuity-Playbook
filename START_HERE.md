@@ -7,7 +7,7 @@ Normal model: one active coding agent per game at a time; task branches belong t
 ## 0. Routing and permission
 
 - Playbook only supplied: maintain the playbook (see its `AGENTS.md`). Do not invent a game.
-- Playbook plus a game target: continue below. Note the playbook revision (`git -C <playbook> rev-parse HEAD`, and branch).
+- Playbook plus a game target: continue below. Use a committed playbook revision and record its source repository and full commit SHA (`git -C <playbook> rev-parse HEAD`). A branch or tag may be an additional label, never the source pin; do not copy uncommitted playbook edits as that revision.
 - Authorized without asking: inspect the game, make reviewed documentation/tooling changes on a setup branch, run safe checks, commit and push that branch, open a (draft) PR.
 - Ask first: purchases, new remote repositories or visibility changes, system-wide installs, global Git/client configuration, Unity upgrades, force pushes, destructive cleanup, discarding unexplained work, privileged runners, merging.
 - The owner is a designer. Inspect technical facts yourself; ask only for a consequential design choice, permission, or inaccessible information.
@@ -53,8 +53,10 @@ Follow the checkpoint procedure in the game's `docs/ai/WORKFLOW.md`:
 1. Commit the setup work as **C** (explicit staging, no unrelated files).
 2. Write `docs/ai/CURRENT.md` with `Reviewed-Commit:` set to C's full ID and honest verification results.
 3. Commit **H** changing only CURRENT.
-4. `python -B tools/ai/check_handoff.py --ref HEAD --publish --remote <alias> --branch <name>` (use the remote alias you inspected, not an assumed `origin`).
-5. Push the branch without force, open a draft PR where possible, and confirm the exact remote commit.
+4. Validate the committed handoff locally: `python -B tools/ai/check_handoff.py --ref HEAD`. Inspect local status, the intended branch, and interrupted Git operations before pushing; this command checks the committed record only.
+5. Push the branch without force.
+6. Verify publication afterward: `python -B tools/ai/check_handoff.py --ref HEAD --publish --remote <alias> --branch <name>` (use the remote alias you inspected, not an assumed `origin`). This read-only command requires the remote branch to already match local HEAD; it does not push.
+7. Open a draft PR where possible and report the verified remote commit separately from any CI results.
 
 ## 6. Optional GitHub check
 
@@ -66,4 +68,4 @@ State: the repository, branch, and published commit as observed on the remote; w
 
 ## Reapplying later
 
-Do not copy files over a configured game. Compare, integrate a targeted patch, preserve instructions, decisions, task state, and code, and record the new playbook revision in `PROJECT.md`.
+Do not copy files over a configured game. Compare, integrate a targeted patch, preserve instructions, decisions, task state, and code, and record the new playbook source repository and full commit SHA in `PROJECT.md`. Each game retains its independent local copy; master changes do not update it automatically.
