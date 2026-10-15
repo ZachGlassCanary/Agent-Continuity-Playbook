@@ -3,6 +3,10 @@
 Read these instructions, applicable nested instructions, and docs/ai/WORKFLOW.md.
 Project context is in PROJECT.md, the active requirements in TASK.md, progress
 in CURRENT.md, and important rationale in DECISIONS.md under docs/ai/.
+PROJECT maps the repository's authoritative design and history (by default
+docs/ai/DESIGN.md and docs/ai/DESIGN_CHANGELOG.md). Read relevant design and
+decisions before changing affected behavior. Follow WORKFLOW's design procedure;
+do not treat experimental findings, implementation or merging as owner approval.
 
 Before development in a new session, account, provider, or context reset:
 inspect local changes and interrupted Git operations; fetch the intended remote

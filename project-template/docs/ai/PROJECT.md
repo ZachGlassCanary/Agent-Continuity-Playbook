@@ -3,10 +3,18 @@
 Template: replace every `[FILL IN: ...]` with facts from the actual project. Do not put private absolute machine paths here.
 
 ## Purpose, goals, non-goals
-[FILL IN: what the game is, what it must do, what it deliberately will not do]
+[FILL IN: link to the authoritative repository design sections for vision and project boundaries; do not maintain a second copy here]
 
 ## Approved constraints
-[FILL IN: owner-approved constraints, or "none recorded"]
+[FILL IN: link to approved design constraints; keep technical/environment constraints here, or "none recorded"]
+
+## Design authority
+
+- Current design and open design questions: [DESIGN.md](DESIGN.md).
+- Decision rationale, sources and approval: [DECISIONS.md](DECISIONS.md).
+- Design history: [DESIGN_CHANGELOG.md](DESIGN_CHANGELOG.md).
+
+Replace these links with existing equivalents when adopting a project. Identify one active repository location for each role; imported duplicates and external copies are not assumed synchronized. Preserve any inaccessible-source gap in CURRENT instead of claiming migration or approval is complete.
 
 ## Systems
 Implemented: [FILL IN]

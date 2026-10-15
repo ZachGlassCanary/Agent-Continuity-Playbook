@@ -4,6 +4,8 @@ A playbook that teaches a coding agent how to set up a Unity game (new or existi
 
 Normal model: **one active coding agent per game at a time**, task branches named for features (not providers), and frequent published checkpoints.
 
+Each game keeps its design source of truth in its own repository: current intent and boundaries, decision rationale/approval, and a dated design changelog. Setup reuses existing equivalents and maps their paths; task/handoff records link to them. No external documentation service is required. Experiments, implementation, verification, owner acceptance and publication remain distinct.
+
 ## Contents
 
 | Path | Purpose |

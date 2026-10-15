@@ -12,7 +12,7 @@ This file holds the task's requirements, not its progress (progress goes in CURR
 [FILL IN: observable criteria]
 
 ## Relevant systems, scenes, and decisions
-[FILL IN: or "none"]
+[FILL IN: relevant authoritative design section links and decision IDs, systems and scenes, or "none". Task scope does not silently override project design; record an authorized design change in its owning documents]
 
 ## Required technical checks and gameplay review
 [FILL IN]
