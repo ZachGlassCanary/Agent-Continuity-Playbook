@@ -29,6 +29,8 @@ The normal model is **one active coding agent per game at a time**. Task branche
 
 Reusable instructions and templates; new-game setup and existing-game adoption; shared project knowledge; startup and recovery procedures; frequent published checkpoints; a small check for handoff structure, changed tracked content, and Git publication; practical Unity validation; and a lightweight GitHub check where available.
 
+Shared knowledge includes a repository-based design source of truth, meaningful decision rationale/approval, bounded experiment scope and dated design changes. No external documentation service is required.
+
 ### Deliberately excluded
 
 Custom installation/rollback software, automatic upgrades, generated JSON progress databases, custom content-hashing algorithms, session-token systems, autonomous repair, mandatory agent-framework dependencies, global client changes, and a large compatibility or benchmarking program. These are not a hidden future backlog the agent must complete before the owner can make a game.
@@ -82,6 +84,8 @@ project-template/
   CLAUDE.md
   docs/ai/
     PROJECT.md
+    DESIGN.md
+    DESIGN_CHANGELOG.md
     TASK.md
     CURRENT.md
     DECISIONS.md
@@ -109,7 +113,9 @@ Apply the following default layout to each game, preserving existing equivalents
 |---|---|
 | `AGENTS.md` | Short shared operating rules and pointers to project context. |
 | `CLAUDE.md` | Supported import bridge; preserve other applicable existing instructions. |
-| `docs/ai/PROJECT.md` | Purpose, boundaries, current architecture, environment, commands, and validation policy. |
+| `docs/ai/PROJECT.md` | Design-authority map and links to purpose/boundaries; current architecture, environment, commands, and validation policy. |
+| `docs/ai/DESIGN.md` | Current intended design, whole-project boundaries, bounded experiments and open design questions. |
+| `docs/ai/DESIGN_CHANGELOG.md` | Dated design changes and reversals, linked to decisions and current design. |
 | `docs/ai/TASK.md` | The current task's requirements and acceptance criteria. |
 | `docs/ai/CURRENT.md` | Current progress, failures, verification results, and next action. |
 | `docs/ai/DECISIONS.md` | Important decisions and reasons, with sources and approval status. |
@@ -127,11 +133,29 @@ Do not silently create two authoritative copies of an existing design document. 
 
 ### Minimum template content
 
-**PROJECT.md:** game purpose; goals/non-goals; approved constraints; implemented versus planned systems; important file/scene map; Unity roots and exact versions; intended platforms; how to open/run; relevant test/build commands; what checks each kind of change requires; external dependencies/access; known unknowns; playbook source repository and full commit SHA; actual CI/protection limitations. Do not hard-code someone's private absolute machine paths in portable instructions.
+**PROJECT.md:** repository design-authority map and links to vision, goals/non-goals and approved design constraints (not duplicate rules); technical constraints; implemented versus planned systems; important file/scene map; Unity roots and exact versions; intended platforms; how to open/run; relevant test/build commands; what checks each kind of change requires; external dependencies/access; technical known unknowns; playbook source repository and full commit SHA; actual CI/protection limitations. Identify the active design copy and any access/synchronization gap in CURRENT. Do not hard-code someone's private absolute machine paths in portable instructions.
 
-**TASK.md:** stable human-readable task name/ID; source request or issue and captured revision/date; scope/exclusions; observable acceptance criteria; relevant systems/scenes/decisions; required technical checks and gameplay review. It is a current execution snapshot, not a second progress journal. With no game feature supplied, the real task is setup or awaiting the owner's next task, not an invented feature.
+**DESIGN.md:** intended player experience and goals; whole-project scope, non-goals and firm constraints; current rules linked to decision IDs and labeled owner-approved, proposed, experimental, deferred or rejected as applicable; bounded experiments with their questions, included work, exclusions, success/stop criteria and status; unresolved design questions kept explicit. Reuse an existing repository design bible instead when suitable and map its actual paths; do not retain a competing default copy.
 
-**DECISIONS.md:** short entries with an ID, decision, reason, significant rejected alternatives, affected scope, and source/status: proposed, owner-approved, technical observation, or superseded. An agent-authored proposal is not owner approval. Do not log every minor implementation detail.
+**DESIGN_CHANGELOG.md:** newest-first dated entries identifying what changed, why, what it replaces, the related decision/source/status and links to affected current design. Preserve old entries. Log meaningful design changes and experiment scope/status changes, not routine implementation or every tuning adjustment. Initial baseline reconstruction must separate observed code from approved intent.
+
+**TASK.md:** stable human-readable task name/ID; source request or issue and captured revision/date; scope/exclusions; observable acceptance criteria; relevant design section links, systems/scenes/decision IDs; required technical checks and gameplay review. It is a current execution snapshot, not a second progress journal or a silent override of project design. With no game feature supplied, the real task is setup or awaiting the owner's next task, not an invented feature.
+
+**DECISIONS.md:** short entries with an ID, decision, reason, significant rejected alternatives, affected scope, dated source/owner or authority, links to affected design, supersedes/superseded-by IDs, and experimental/acceptance boundaries where relevant. Status is proposed, owner-approved, experimental finding, technical observation, deferred, rejected or superseded. Agent proposals, implementation and merging do not establish owner approval. Preserve prior decisions through explicit supersession. Do not log every minor implementation detail or duplicate current design rules here.
+
+### Design authority and change procedure
+
+Keep authoritative design tracked in each game's repository. Map current design, decisions and design history from AGENTS, PROJECT and WORKFLOW, reusing existing equivalents rather than creating competing authorities. Ordinary work must not depend on an external service or the master playbook checkout. Bring external-only execution-critical design into the repository within authorized scope, preserving provenance and prior history. Inaccessible or conflicting intent remains a documented gap, not a claimed migration or synchronization success.
+
+Before changing affected behavior, read the relevant design, decisions and recent design changes. Capture meaningful authorized changes with their source/date, rationale, status and scope; update current design and append its dated changelog entry in the same reviewed change. Preserve superseded decisions and unresolved questions. Distinguish whole-project rules from temporary experiment limits: expanding a slice does not silently expand project scope.
+
+Proposed, authorized to test, implemented, verified, owner-accepted and published are different claims. Capture the actual scope of acceptance; a passed experiment does not automatically establish final design, tuning or production readiness. Owner approval follows the project's real authorization rules, not a document label supplied by an agent.
+
+When code and design disagree, record the discrepancy in CURRENT and classify it as a defect, an authorized design change or an unresolved question. Fix clear defects within authorized scope; change design only with actual authority. Preserve sources and ask about consequential ambiguous intent while continuing independent work. Do not silently rewrite intent to match code or guess missing design.
+
+TASK owns execution requirements; CURRENT owns progress and evidence. Handoffs link relevant design, changed decisions, unresolved questions/discrepancies and access/synchronization gaps rather than reproducing the design bible. Tracked design changes participate in the helper's ordinary content comparison, but the helper does not validate linked design documents, prose quality, approval or design truth. Do not expand it to certify those claims.
+
+### Current handoff format
 
 **CURRENT.md:** use this small human-readable format; replace template fields from actual evidence:
 
@@ -143,6 +167,7 @@ Reviewed-Commit: <full ID of the existing commit actually reviewed>
 
 ## Summary
 What the current task is and where it stands.
+Link relevant design sections and changed decisions rather than copying rules.
 
 ## Completed
 Specific implemented work and relevant locations, or an explicit none.
@@ -157,6 +182,7 @@ Use passed, failed, blocked, not_run, or not_applicable with an explanation.
 
 ## Problems and uncertainties
 Known failures, missing context, and assumptions. Distinguish old from new issues.
+Link unresolved design questions/discrepancies and design-source access gaps.
 
 ## Next action
 The next concrete action and any boundary the next agent must not cross.
@@ -179,6 +205,10 @@ The project AGENTS file should be compact and include these rules, with correct 
 Read these instructions, applicable nested instructions, and docs/ai/WORKFLOW.md.
 Project context is in PROJECT.md, the active requirements in TASK.md, progress
 in CURRENT.md, and important rationale in DECISIONS.md under docs/ai/.
+PROJECT maps the repository's authoritative design and history (by default
+docs/ai/DESIGN.md and docs/ai/DESIGN_CHANGELOG.md). Read relevant design and
+decisions before changing affected behavior. Follow WORKFLOW's design procedure;
+do not treat experimental findings, implementation or merging as owner approval.
 
 Before development in a new session, account, provider, or context reset:
 inspect local changes and interrupted Git operations; fetch the intended remote
@@ -231,7 +261,7 @@ If Unity is unavailable, the collaboration documents can still be prepared, but 
 
 ### Apply and check
 
-Copy/adapt the generic documents and reviewed helper. Preserve existing file contents and commands; inspect conflicts rather than replacing them. Record actual validation procedures in PROJECT. Run the helper tests, perform applicable real Unity checks, create the initial handoff, and verify publication as described below.
+Copy/adapt the generic documents and reviewed helper. Preserve existing file contents and commands; inspect conflicts rather than replacing them. Establish and map repository design authority using section 4, reusing existing equivalents and recording unresolved intent honestly. Record actual validation procedures in PROJECT. Run the helper tests, perform applicable real Unity checks, create the initial handoff, and verify publication as described below.
 
 An empty repository needs an initial commit before it has a reviewable commit ID; establish that minimal baseline openly. Use setup/task branches once the repository has a base. Do not enable protections that prevent initial publication or owner recovery.
 
@@ -241,7 +271,7 @@ No candidate-tool trial, extra test game, or second-account rehearsal is require
 
 Use this procedure in the game's local WORKFLOW. C and H below are explanations, not literal commands or placeholder commit IDs.
 
-1. **Save and capture.** Save relevant editor buffers/scenes using available safe tools. Record changed requirements in TASK, durable rationale in DECISIONS, and important project facts in PROJECT. Include a concise current progress draft; never leave the only important explanation in chat.
+1. **Save and capture.** Save relevant editor buffers/scenes using available safe tools. Record changed requirements in TASK, durable rationale/status in DECISIONS, and important project facts in PROJECT. Update current design and its dated changelog together for authorized design changes; link changed decisions and unresolved design questions in CURRENT. Include a concise current progress draft; never leave the only important explanation in chat.
 2. **Review and commit C.** Inspect all changes, explicitly stage intended files, and make an ordinary task commit containing the actual implementation and requirements. C is now an existing full commit ID. Do not include unrelated owner edits, caches, secrets, or license files.
 3. **Check the actual inputs.** Run the task's relevant checks against C. Confirm the worktree and dependencies correspond to what is being tested, and inspect for source changes afterward. A Unity import may alter files; resolve that and commit a new C when necessary. Never say a result covers inputs the test did not run against.
 4. **Write the handoff.** Reconcile CURRENT against C and its actual requirements/results. Put C in Reviewed-Commit. A WIP record may honestly say tests failed, were blocked, or were not run. Keep the next action specific.
@@ -315,7 +345,7 @@ Every new session/provider/account and every loss of reliable context follows th
 1. Read AGENTS and the local WORKFLOW. Inspect local changes, branch, interrupted operations, and available permissions before switching or running project commands.
 2. Fetch the intended remote when available. Examine relevant remote task branches and accessible open PRs, not only the default branch. Read candidate task/handoff records as Git objects before a safe explicit checkout. A branch with missing/malformed notes can still contain important work; flag it rather than hiding it.
 3. Select the explicitly requested task when valid. Otherwise reconcile CURRENT, paused work, PR state, and actual diffs. More than one plausible active task is an ambiguity to resolve, not permission to choose the newest timestamp. Confirm any prior writer has stopped before overlapping work.
-4. Read the selected task, current project constraints, relevant decisions, recent changes, and affected implementation/scenes. Check accessible newer owner requirements and record approved changes before acting. A source link alone is insufficient when the source is inaccessible.
+4. Read the selected task, PROJECT's design-authority map, relevant current design/constraints, decisions, recent design changes, and affected implementation/scenes. Reconcile design/code discrepancies using section 4. Check accessible newer owner requirements and record approved changes before acting. A source link alone is insufficient when the source is inaccessible.
 5. Run the handoff check and inspect its failures. If the note is stale, compare the intervening commits and reconstruct actual progress. Run the relevant baseline or state a specific limit. An understood failing baseline may support repairing that failure; missing context must not authorize unrelated development.
 6. Briefly tell the owner the task being resumed, the important boundary, and the next action. Proceed within the supported scope. Do not demand an approval ceremony merely to confirm facts already established.
 
