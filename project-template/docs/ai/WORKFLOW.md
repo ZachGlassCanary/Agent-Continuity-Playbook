@@ -11,6 +11,8 @@ python -B tools/ai/check_handoff.py --ref HEAD --publish --remote <alias> --bran
 
 Exit 0: every requested check passed. 1: a check failed (STALE, INVALID, DIRTY_OR_INTERRUPTED, MISMATCH). 2: evidence unavailable or bad invocation (UNVERIFIABLE). A passing check does not prove the game works, that notes are accurate, or that merging is allowed.
 
+Use the first command to validate the committed record before pushing. Inspect local status separately. Use `--publish` after pushing to verify local publication state and the exact remote branch tip; it is read-only and requires the remote to already match local HEAD.
+
 ## Startup (every new session, provider, account, or context loss)
 
 1. Read AGENTS.md and this file. Inspect local changes, branch, interrupted operations, and permissions before switching branches or running project commands.
@@ -29,9 +31,22 @@ A note that passes the check is not thereby correct: read and compare it.
 3. Run the task's relevant checks against C. Confirm the tested worktree matches C. If Unity import changes files, resolve that and commit a new C.
 4. Write CURRENT against C: put C's full ID in `Reviewed-Commit`. WIP, failed, blocked, and not_run results are honest and allowed.
 5. Commit **H**, changing only CURRENT.
-6. Run the handoff check with `--publish` on H, push the task branch without force, open/update a draft PR, and confirm the exact remote commit.
+6. Validate H locally with `python -B tools/ai/check_handoff.py --ref HEAD`. Inspect local status, the intended branch, and interrupted Git operations before pushing; the record-only check does not inspect them.
+7. Push the task branch without force.
+8. Verify publication with `python -B tools/ai/check_handoff.py --ref HEAD --publish --remote <alias> --branch <name>`, using the inspected remote alias and intended branch. Open/update a draft PR and report the verified remote commit separately from CI results.
 
 Never write H's own ID inside H. Do not commit CI results back into the triggering commit. Before a long test or likely interruption, publish what you have as labeled WIP. Only CURRENT may change between C and H; any other change needs a new reviewed C. Do not advance `Reviewed-Commit` just to silence the check.
+
+For emergency preservation, an incomplete handoff may fail validation: label it honestly and push the reviewed WIP rather than lose it. Verify the remote tip separately, report the failed check, and finish the handoff when possible. Such a branch is not merge-ready.
+
+## Unity validation
+
+- Use the exact editor version and actual test/build procedures recorded in PROJECT. Preserve `.meta` files and GUIDs, package manifests and the package lock, and existing serialization/merge conventions. Keep caches out of commits; do not bulk-reserialize scenes as setup.
+- Check that required LFS objects, submodules, local packages, licensed assets, platform modules, and a usable Unity license are available. A matching remote Git tip does not prove these dependencies are accessible to the next agent/account. Do not kill the owner's busy editor.
+- For C# or behavior changes, import/compile, run relevant existing automated tests, and perform focused gameplay checks. For scenes, prefabs, assets, settings, or packages, check imports/references and affected scenes/gameplay; run build/platform checks where affected. Prose-only changes do not imply a Unity run.
+- Use arguments supported by the installed Test Framework. Inspect fresh result files and logs, test counts, filters, and skipped tests; exit code zero alone is insufficient. Say when no suite exists or intended tests did not run; an empty suite is not a passing suite.
+- Record each applicable result as passed, failed, blocked, not_run, or not_applicable, with the actual command/procedure, tested commit, editor/package environment, counts where applicable, and evidence or limitation. Confirm tested inputs match the commit; resolve Unity import changes before claiming they are covered. Required validation that cannot run leaves work WIP or review-blocked.
+- For visual behavior or game feel the agent cannot verify, give the designer concrete review steps and expected behavior. Screenshots and code inspection are not completed playtests. Record owner acceptance only when it actually occurred.
 
 ## Merging
 

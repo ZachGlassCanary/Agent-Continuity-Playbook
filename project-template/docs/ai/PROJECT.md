@@ -33,7 +33,8 @@ Important files and scenes: [FILL IN]
 [FILL IN: or "none known"]
 
 ## Playbook source
-Revision: [FILL IN: playbook commit ID or branch]. This is a source reference, not an update registry.
+Source repository: [FILL IN: playbook repository URL]
+Revision: [FILL IN: full playbook source commit SHA]. A branch or tag alone is not a source pin. This identifies the committed source copied into this game, not an update registry; the game keeps its own local copy and receives only deliberately reviewed patches.
 
 ## CI and protection limitations
 [FILL IN: what `ai-handoff-check` and branch protection actually do here, and what is unavailable or advisory only]
